@@ -276,21 +276,21 @@ impl Cli {
         println!("- Abisaac Carmona - CI: 32.218.469");
         println!("- José Puerta     - CI: 31.904.115");           
         println!();
-        println!("Uso: task-cli <command> [arguments]");
+        println!("Uso: task-cli <comando> [argumentos]");
         println!();
         println!("Comandos:");
         println!("  register <usuario> <contraseña>   Registra un nuevo usuario");
         println!("  login <usuario> <contraseña>      Inicia sesión con un usuario existente");
-        println!("  add <descripcion>           Agrega una nueva tarea");
-        println!("  update <id> <descripcion>   Actualiza la descripcion de una tarea");
-        println!("  delete <id>                 Elimina una tarea");
-        println!("  mark-in-progress <id>       Marca una tarea como en progreso");
-        println!("  mark-done <id>              Marca una tarea como completada");
-        println!("  list                        Lista todas las tareas");
-        println!("  list done                   Lista las tareas completadas");
-        println!("  list todo                   Lista las tareas pendientes");
-        println!("  list in-progress            Lista las tareas en progreso");
-        println!("  help                        Muestra esta ayuda");
+        println!("  add '<descripcion>'               Agrega una nueva tarea");
+        println!("  update <id> '<descripcion>'       Actualiza la descripcion de una tarea");
+        println!("  delete <id>                       Elimina una tarea");
+        println!("  mark-in-progress <id>             Marca una tarea como en progreso");
+        println!("  mark-done <id>                    Marca una tarea como completada");
+        println!("  list                              Lista todas las tareas");
+        println!("  list done                         Lista las tareas completadas");
+        println!("  list todo                         Lista las tareas pendientes");
+        println!("  list in-progress                  Lista las tareas en progreso");
+        println!("  help                              Muestra esta ayuda");
     }
 
     /// Imprime un resumen de cantidades por estado.
