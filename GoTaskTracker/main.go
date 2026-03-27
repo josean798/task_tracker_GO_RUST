@@ -54,7 +54,17 @@ func main() {
 			fmt.Println("Debes iniciar sesión primero.")
 			return
 		}
-		tasks.ListTasks(users, currentUser.Username)
+
+		filter := ""
+		if len(os.Args) >= 3 {
+			filter = strings.ToLower(os.Args[2])
+			if filter != "todo" && filter != "done" && filter != "inprogress" {
+				fmt.Println("Uso: task-cli list [todo|done|inprogress]")
+				return
+			}
+		}
+
+		tasks.ListTasks(users, currentUser.Username, filter)
 
 	case "delete":
 		if currentUser == nil || len(os.Args) < 3 {
@@ -69,8 +79,19 @@ func main() {
 			fmt.Println("Uso: task-cli update <id> <estado>")
 			return
 		}
-		id, _ := strconv.Atoi(os.Args[2])
-		tasks.UpdateTask(id, os.Args[3], users, currentUser.Username)
+		id, err := strconv.Atoi(os.Args[2])
+		if err != nil {
+			fmt.Println("Error: El ID debe ser numérico.")
+			return
+		}
+
+		status := strings.ToLower(os.Args[3])
+		if status != "todo" && status != "done" && status != "inprogress" {
+			fmt.Println("Uso: task-cli update <id> <todo|done|inprogress>")
+			return
+		}
+
+		tasks.UpdateTask(id, status, users, currentUser.Username)
 
 	default:
 		fmt.Printf("Comando desconocido: %s\n", command)

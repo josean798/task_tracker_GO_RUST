@@ -102,7 +102,7 @@ func main() {
 
 	var updateCmd = &cobra.Command{
 		Use:   "update [id] [estado]",
-		Short: "Actualizar el estado de una tarea (ej. done, in-progress)",
+		Short: "Actualizar el estado de una tarea (todo, done, inprogress)",
 		Args:  cobra.ExactArgs(2),
 		Run: func(cmd *cobra.Command, args []string) {
 			if currentUser == nil {
@@ -114,7 +114,14 @@ func main() {
 				fmt.Println("Error: El ID debe ser numérico.")
 				return
 			}
-			tasks.UpdateTask(id, args[1], users, currentUser.Username)
+
+			status := strings.ToLower(args[1])
+			if status != "todo" && status != "done" && status != "inprogress" {
+				fmt.Println("Uso: task-cli update <id> <todo|done|inprogress>")
+				return
+			}
+
+			tasks.UpdateTask(id, status, users, currentUser.Username)
 		},
 	}
 

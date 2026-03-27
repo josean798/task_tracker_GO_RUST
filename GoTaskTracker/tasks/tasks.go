@@ -31,16 +31,36 @@ func AddTask(title string, users []models.User, username string) {
 	}
 }
 
-func ListTasks(users []models.User, username string) {
+func ListTasks(users []models.User, username string, statusFilter string) {
 	for _, user := range users {
 		if user.Username == username {
 			if len(user.Tasks) == 0 {
 				fmt.Printf("El usuario '%s' no tiene tareas.\n", username)
 				return
 			}
-			fmt.Printf("Tareas de '%s':\n", username)
+
+			actualFilter := statusFilter
+			if statusFilter == "todo" {
+				actualFilter = "pending"
+			}
+
+			found := false
 			for _, task := range user.Tasks {
-				fmt.Printf("- [%s] ID: %d | %s | Creada: %s\n", task.Status, task.ID, task.Title, task.CreatedAt)
+				if actualFilter == "" || task.Status == actualFilter {
+					if !found {
+						if statusFilter == "" {
+							fmt.Printf("Tareas de '%s':\n", username)
+						} else {
+							fmt.Printf("Tareas de '%s' con estado '%s':\n", username, statusFilter)
+						}
+						found = true
+					}
+					fmt.Printf("- [%s] ID: %d | %s | Creada: %s\n", task.Status, task.ID, task.Title, task.CreatedAt)
+				}
+			}
+
+			if !found {
+				fmt.Printf("No se encontraron tareas con el estado: %s\n", statusFilter)
 			}
 			return
 		}
@@ -65,11 +85,21 @@ func DeleteTask(taskID int, users []models.User, username string) {
 }
 
 func UpdateTask(taskID int, newStatus string, users []models.User, username string) {
+	actualStatus := newStatus
+	if newStatus == "todo" {
+		actualStatus = "pending"
+	}
+
+	if actualStatus != "pending" && actualStatus != "done" && actualStatus != "inprogress" {
+		fmt.Println("Estado inválido. Estados permitidos: todo, done, inprogress.")
+		return
+	}
+
 	for i, user := range users {
 		if user.Username == username {
 			for j, task := range user.Tasks {
 				if task.ID == taskID {
-					users[i].Tasks[j].Status = newStatus
+					users[i].Tasks[j].Status = actualStatus
 					storage.SaveData(users)
 					fmt.Printf("Tarea %d actualizada a estado: '%s'.\n", taskID, newStatus)
 					return

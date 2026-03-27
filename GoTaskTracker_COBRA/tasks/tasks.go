@@ -39,8 +39,6 @@ func ListTasks(users []models.User, username string, statusFilter string) {
 				return
 			}
 
-			// NOTA: Como en tu código original el estado inicial es "pending",
-			// hacemos que "todo" también busque tareas "pending" para mayor comodidad.
 			actualFilter := statusFilter
 			if statusFilter == "todo" {
 				actualFilter = "pending"
@@ -88,11 +86,21 @@ func DeleteTask(taskID int, users []models.User, username string) {
 }
 
 func UpdateTask(taskID int, newStatus string, users []models.User, username string) {
+	actualStatus := newStatus
+	if newStatus == "todo" {
+		actualStatus = "pending"
+	}
+
+	if actualStatus != "pending" && actualStatus != "done" && actualStatus != "inprogress" {
+		fmt.Println("Estado inválido. Estados permitidos: todo, done, inprogress.")
+		return
+	}
+
 	for i, user := range users {
 		if user.Username == username {
 			for j, task := range user.Tasks {
 				if task.ID == taskID {
-					users[i].Tasks[j].Status = newStatus
+					users[i].Tasks[j].Status = actualStatus
 					storage.SaveData(users)
 					fmt.Printf("Tarea %d actualizada a estado: '%s'.\n", taskID, newStatus)
 					return
