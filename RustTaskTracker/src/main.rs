@@ -5,8 +5,10 @@ mod services;
 mod cli;
 mod errors;
 
+use std::fs;
 use std::env;
 use std::path::PathBuf;
+use dirs;
 
 use crate::repositories::json_task_repository::JsonTaskRepository;
 use crate::repositories::json_user_repository::JsonUserRepository;
@@ -21,7 +23,10 @@ use crate::cli::Cli;
 /// verifica si hay un usuario con sesión activa para inicializar el
 /// servicio de tareas, y delega el procesamiento de argumentos al CLI.
 fn main() {
-    let storage_path: PathBuf = PathBuf::from("src/storage");
+    let storage_path: PathBuf = dirs::home_dir().unwrap().join(".task-cli");
+    fs::create_dir_all(&storage_path)
+    .expect("No se pudo crear el directorio de almacenamiento ~/.task-cli");
+    
     let users_file_path: PathBuf = storage_path.join("users.json");
     let session_file_path: PathBuf = storage_path.join("session.json");
 
