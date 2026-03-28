@@ -17,9 +17,7 @@ use crate::services::task_service::TaskService;
 use crate::services::user_service::UserService;
 use crate::cli::Cli;
 
-/// Punto de entrada de la aplicación.
-///
-/// Inyecta las dependencias (repositorios → servicios → CLI),
+/// Inyecta las dependencias,
 /// verifica si hay un usuario con sesión activa para inicializar el
 /// servicio de tareas, y delega el procesamiento de argumentos al CLI.
 fn main() {
